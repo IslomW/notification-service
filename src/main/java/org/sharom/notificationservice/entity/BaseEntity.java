@@ -1,8 +1,6 @@
 package org.sharom.notificationservice.entity;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Version;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +18,9 @@ import java.util.UUID;
 public abstract class BaseEntity {
 
     @Id
+    @GeneratedValue
+    @org.hibernate.annotations.UuidGenerator // Явно указываем генератор UUID от Hibernate
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
     @Version
