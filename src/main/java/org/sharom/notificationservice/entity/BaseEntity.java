@@ -19,7 +19,7 @@ public abstract class BaseEntity {
 
     @Id
     @GeneratedValue
-    @org.hibernate.annotations.UuidGenerator // Явно указываем генератор UUID от Hibernate
+    @org.hibernate.annotations.UuidGenerator
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
