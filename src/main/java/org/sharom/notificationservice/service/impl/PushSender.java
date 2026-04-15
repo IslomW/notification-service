@@ -10,8 +10,6 @@ import org.sharom.notificationservice.service.NotificationSender;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,8 +26,8 @@ public class PushSender implements NotificationSender {
     public void send(Notification notification, CreateNotificationRequest req) {
 
 
-        List<UUID> tokens = deviceTokenRepository
-                .findDeviceTokenByUserId(req.userIds());
+        List<DeviceToken> tokens = deviceTokenRepository
+                .findDeviceTokensByUserId(req.userIds());
 
 
         if (tokens.isEmpty()){

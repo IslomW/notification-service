@@ -13,4 +13,6 @@ public interface DeviceTokenService {
 
     void deleteTokenById(UUID id);
 
+    DeviceToken getTokenByUserId(UUID userId);
+
 }
