@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface DeviceTokenRepository extends JpaRepository<DeviceToken, UUID> {
 
-    List<DeviceToken> findDeviceTokensByUserId(List<UUID> userId);
+    List<DeviceToken> findByUserIdIn(List<UUID> userId);
 
     Optional<DeviceToken> findDeviceTokenByUserId(UUID userId);
 }

@@ -18,7 +18,7 @@ public class DeviceTokenServiceImpl implements DeviceTokenService {
 
     @Override
     public List<DeviceToken> getAllUserTokens(UUID userId) {
-        return deviceTokenRepository.findDeviceTokensByUserId(List.of(userId));
+        return deviceTokenRepository.findByUserIdIn(List.of(userId));
     }
 
     @Override

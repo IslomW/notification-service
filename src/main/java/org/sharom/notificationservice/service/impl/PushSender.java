@@ -27,7 +27,7 @@ public class PushSender implements NotificationSender {
 
 
         List<DeviceToken> tokens = deviceTokenRepository
-                .findDeviceTokensByUserId(req.userIds());
+                .findByUserIdIn(req.userIds());
 
 
         if (tokens.isEmpty()){
