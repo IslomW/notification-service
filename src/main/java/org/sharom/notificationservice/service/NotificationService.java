@@ -2,8 +2,28 @@ package org.sharom.notificationservice.service;
 
 
 import org.sharom.notificationservice.dto.CreateNotificationRequest;
+import org.sharom.notificationservice.dto.NotificationDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.UUID;
 
 public interface NotificationService {
 
+    // Dashboard
     void createNotification(CreateNotificationRequest request);
+
+
+    // Mobile
+    Page<NotificationDTO> getAllUserNotifications(Pageable pageable);
+
+    NotificationDTO getNotificationById(UUID notificationId);
+
+    void markAsReadById(UUID notificationId);
+
+    void markAsReadAllNotifications();
+
+    Long getUnreadCount();
+
+
 }

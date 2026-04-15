@@ -1,8 +1,7 @@
-package org.sharom.notificationservice;
+package org.sharom.notificationservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.sharom.notificationservice.dto.CreateNotificationRequest;
-import org.sharom.notificationservice.entity.Notification;
 import org.sharom.notificationservice.service.NotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

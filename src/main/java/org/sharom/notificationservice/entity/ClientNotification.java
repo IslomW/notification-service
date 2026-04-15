@@ -2,7 +2,9 @@ package org.sharom.notificationservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
@@ -11,6 +13,8 @@ import java.util.UUID;
 @Entity
 @Table(name = "client_notifications")
 @SuperBuilder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientNotification extends AuditEntity {

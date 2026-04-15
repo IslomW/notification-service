@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.UUID;
+
 @Entity
 @SuperBuilder
 @Setter
@@ -15,7 +17,15 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceToken extends BaseEntity {
-    private String userId;
+
+    private UUID userId;
+
+    private String deviceId;
+
+    private String appVersion;
+
+    private Platform platform;
+
     @Column(nullable = false, unique = true)
     private String token;
 }
