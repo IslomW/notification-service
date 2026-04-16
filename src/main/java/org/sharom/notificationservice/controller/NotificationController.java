@@ -30,17 +30,11 @@ public class NotificationController {
         return ResponseEntity.ok(notificationService.getNotificationById(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<Page<NotificationDTO>> getAllNotification(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return ResponseEntity.ok(notificationService.getAllUserNotifications(pageable));
-    }
-
-    @PostMapping("/mark")
-    public ResponseEntity<Void> markAsRead(@RequestParam UUID notificationId) {
-        notificationService.markAsReadById(notificationId);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/mark-all")

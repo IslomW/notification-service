@@ -26,6 +26,8 @@ public class DeviceToken extends BaseEntity {
 
     private Platform platform;
 
+    private Lang lang;
+
     @Column(nullable = false, unique = true)
     private String token;
 }

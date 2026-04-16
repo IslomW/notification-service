@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.sharom.notificationservice.dto.ContentDTO;
 import org.sharom.notificationservice.dto.CreateNotificationRequest;
 import org.sharom.notificationservice.dto.NotificationDTO;
-import org.sharom.notificationservice.entity.ClientNotification;
-import org.sharom.notificationservice.entity.Content;
-import org.sharom.notificationservice.entity.Lang;
-import org.sharom.notificationservice.entity.Notification;
+import org.sharom.notificationservice.entity.*;
+import org.sharom.notificationservice.exception.NotFoundException;
 import org.sharom.notificationservice.repository.ClientNotificationRepository;
 import org.sharom.notificationservice.repository.ContentRepository;
 import org.sharom.notificationservice.repository.NotificationRepository;
@@ -50,26 +48,53 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public Page<NotificationDTO> getAllUserNotifications(Pageable pageable) {
-        return null;
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+        return notificationRepository.findAllForUser( userId , Lang.RU, pageable);
     }
 
     @Override
     public NotificationDTO getNotificationById(UUID notificationId) {
-        return clientNotificationRepository.findNotificationDtoById(notificationId, Lang.RU)
-                .orElseThrow(() -> new RuntimeException("notification.not.found"));
-    }
+        // getLang
 
-    @Override
-    public void markAsReadById(UUID notificationId) {
-        ClientNotification clientNotification = clientNotificationRepository.getClientNotificationsById(notificationId)
-                .orElseThrow(() -> new RuntimeException("notification.not.found"));
-        clientNotification.setRead(true);
-        clientNotification.setReadAt(Instant.now());
-        clientNotificationRepository.save(clientNotification);
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+
+        clientNotificationRepository
+                .findOrCreateAndMarkRead(userId, notificationId);
+
+        return clientNotificationRepository
+                .findNotificationDtoByNoteId(notificationId, Lang.RU)
+                .orElseThrow(NotFoundException::notificationNotFound);
+
     }
 
     @Override
     public void markAsReadAllNotifications() {
+        UUID userId = UUID.fromString("550e8400-e29b-41d4-a716-446655440000");
+
+        clientNotificationRepository.markAllAsRead(userId);
+
+        // 2.
+        List<Notification> missingNotifications =
+                notificationRepository.findAllGlobalNotLinkedToUser(userId);
+
+        if (!missingNotifications.isEmpty()) {
+
+            Instant now = Instant.now();
+
+            List<ClientNotification> newClientNotifications =
+                    missingNotifications.stream()
+                            .map(notification -> ClientNotification.builder()
+                                    .userId(userId)
+                                    .notification(notification)
+                                    .isRead(true)
+                                    .status(Status.SENT)
+                                    .sentAt(notification.getCreatedAt())
+                                    .readAt(now)
+                                    .build())
+                            .collect(Collectors.toList());
+
+            clientNotificationRepository.saveAll(newClientNotifications);
+        }
 
     }
 

@@ -2,7 +2,9 @@ package org.sharom.notificationservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.sharom.notificationservice.entity.DeviceToken;
+import org.sharom.notificationservice.entity.Lang;
 import org.sharom.notificationservice.entity.Platform;
+import org.sharom.notificationservice.exception.NotFoundException;
 import org.sharom.notificationservice.repository.DeviceTokenRepository;
 import org.sharom.notificationservice.service.DeviceTokenService;
 import org.springframework.stereotype.Service;
@@ -26,12 +28,14 @@ public class DeviceTokenServiceImpl implements DeviceTokenService {
         //get version
         String version = "1.0.0";
         String deviceId = "213564";
+        Lang lang = Lang.RU;
 
         DeviceToken deviceToken = new DeviceToken(
                 userId,
                 deviceId,
                 version,
                 Platform.ANDROID,
+                lang,
                 token
         );
 
@@ -46,6 +50,6 @@ public class DeviceTokenServiceImpl implements DeviceTokenService {
     @Override
     public DeviceToken getTokenByUserId(UUID userId) {
         return deviceTokenRepository.findDeviceTokenByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("token.not.found"));
+                .orElseThrow(NotFoundException::tokenNotFound);
     }
 }

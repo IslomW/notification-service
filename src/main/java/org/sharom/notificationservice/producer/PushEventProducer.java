@@ -2,6 +2,7 @@ package org.sharom.notificationservice.producer;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,6 @@ public class PushEventProducer {
     private static final String TOPIC = "push-topic";
 
     public void send(PushEvent event) {
-        kafkaTemplate.send(TOPIC, event.getEventId().toString(), event);
+        kafkaTemplate.send(TOPIC, event.eventId().toString(), event);
     }
 }

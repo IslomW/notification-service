@@ -11,7 +11,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "client_notifications")
+@Table(
+        name = "client_notifications",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "notification_id"})
+)
 @SuperBuilder
 @Getter
 @Setter
