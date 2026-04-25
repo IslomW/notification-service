@@ -1,5 +1,5 @@
 package org.sharom.notificationservice.entity;
 
 public enum Platform {
-    ANDROID, IOS
+    ANDROID, IOS, WEB
 }

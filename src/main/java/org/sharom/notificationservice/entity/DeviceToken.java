@@ -18,6 +18,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DeviceToken extends BaseEntity {
 
+    @Column(columnDefinition = "uuid")
     private UUID userId;
 
     private String deviceId;

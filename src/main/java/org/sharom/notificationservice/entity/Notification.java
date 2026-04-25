@@ -19,13 +19,23 @@ import java.util.List;
 public class Notification extends AuditEntity {
 
     @Enumerated(EnumType.STRING)
-    private NotificationChanel notificationChanel;
-
-    @Enumerated(EnumType.STRING)
     private ReceiverType receiverType;
 
-    private Long readCount;
+    @Column(nullable = false)
+    private Long readCount = 0L;
 
-    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(
+            mappedBy = "notification",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
     private List<Content> contents;
+
+
+
+    public void addContent(Content content) {
+        contents.add(content);
+        content.setNotification(this);
+    }
 }

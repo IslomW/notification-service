@@ -18,7 +18,7 @@ public interface ClientNotificationRepository extends JpaRepository<ClientNotifi
                 cn.id,
                 c.title,
                 c.body,
-                cn.isRead,
+                cn.read,
                 cn.sentAt
             )
             FROM ClientNotification cn
@@ -35,7 +35,7 @@ public interface ClientNotificationRepository extends JpaRepository<ClientNotifi
                 n.id,
                 c.title,
                 c.body,
-                cn.isRead,
+                cn.read,
                 cn.sentAt
             )
             FROM ClientNotification cn
@@ -51,11 +51,11 @@ public interface ClientNotificationRepository extends JpaRepository<ClientNotifi
     @Transactional
     @Query("""
                 UPDATE ClientNotification cn
-                SET cn.isRead = true,
+                SET cn.read = true,
                     cn.status = org.sharom.notificationservice.entity.Status.SENT,
                     cn.readAt = CURRENT_TIMESTAMP
                 WHERE cn.userId = :userId
-                  AND cn.isRead = false
+                  AND cn.read = false
             """)
     void markAllAsRead(UUID userId);
 

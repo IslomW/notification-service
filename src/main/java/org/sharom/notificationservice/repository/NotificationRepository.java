@@ -14,16 +14,20 @@ import java.util.UUID;
 public interface NotificationRepository extends JpaRepository<Notification, UUID> {
 
     @Query("""
-            SELECT 
-                (SELECT COUNT(cn) FROM ClientNotification cn 
-                 WHERE cn.userId = :userId AND cn.isRead = false) 
-                + 
-                (SELECT COUNT(n) FROM Notification n 
-                 WHERE n.receiverType = 'ALL' 
-                 AND n.id NOT IN (
-                     SELECT cn2.notification.id FROM ClientNotification cn2 
-                     WHERE cn2.userId = :userId
-                 ))
+                SELECT
+                    (SELECT COUNT(cn) FROM ClientNotification cn
+                     WHERE cn.userId = :userId
+                       AND cn.read = false
+                    )
+                    +
+                    (SELECT COUNT(n) FROM Notification n
+                     WHERE n.receiverType = org.sharom.notificationservice.entity.ReceiverType.ALL
+                       AND NOT EXISTS (
+                           SELECT 1 FROM ClientNotification cn2
+                           WHERE cn2.notification.id = n.id
+                             AND cn2.userId = :userId
+                       )
+                    )
             """)
     Long countTotalUnread(UUID userId);
 
@@ -39,20 +43,20 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
 
 
     @Query("""
-    SELECT new org.sharom.notificationservice.dto.NotificationDTO(
-        n.id,
-        c.title,
-        c.body,
-        COALESCE(cn.isRead, false),
-        COALESCE(cn.sentAt, n.createdAt)
-    )
-    FROM Notification n
-    JOIN n.contents c
-    LEFT JOIN ClientNotification cn
-        ON cn.notification.id = n.id AND cn.userId = :userId
-    WHERE c.lang = :lang
-    ORDER BY n.createdAt DESC
-""")
+                SELECT new org.sharom.notificationservice.dto.NotificationDTO(
+                    n.id,
+                    c.title,
+                    c.body,
+                    COALESCE(cn.read, false),
+                    COALESCE(cn.sentAt, n.createdAt)
+                )
+                FROM Notification n
+                JOIN n.contents c
+                LEFT JOIN ClientNotification cn
+                    ON cn.notification.id = n.id AND cn.userId = :userId
+                WHERE c.lang = :lang
+                ORDER BY n.createdAt DESC
+            """)
     Page<NotificationDTO> findAllForUser(
             UUID userId,
             Lang lang,

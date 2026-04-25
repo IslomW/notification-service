@@ -10,10 +10,6 @@ import java.util.UUID;
 
 public interface NotificationService {
 
-    // Dashboard
-    void createNotification(CreateNotificationRequest request);
-
-
     // Mobile
     Page<NotificationDTO> getAllUserNotifications(Pageable pageable);
 

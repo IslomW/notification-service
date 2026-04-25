@@ -13,23 +13,33 @@ import java.util.UUID;
 @Entity
 @Table(
         name = "client_notifications",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "notification_id"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "notification_id"}),
+        indexes = {
+                @Index(name = "idx_user", columnList = "user_id"),
+                @Index(name = "idx_notification", columnList = "notification_id")
+        }
 )
 @SuperBuilder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 public class ClientNotification extends AuditEntity {
 
 
+    @Column(name = "user_id", nullable = false)
     private UUID userId;
-    private boolean isRead;
+
+    @Column(name = "is_read")
+    private boolean read;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(nullable = false)
     private Instant sentAt;
+
     private Instant readAt;
 
 
