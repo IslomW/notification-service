@@ -61,7 +61,7 @@ public class InAppHandler implements NotificationHandler<InAppRequest> {
         return InAppRequest.class;
     }
 
-    private void sendToDirect(Notification notification, CreateNotificationRequest req) {
+    private void sendToDirect(Notification notification, InAppRequest req) {
 
         if (CollectionUtils.isEmpty(req.userIds()) || req.receiverType() != ReceiverType.DIRECT) {
             return;
@@ -71,8 +71,32 @@ public class InAppHandler implements NotificationHandler<InAppRequest> {
 
     }
 
+    private void sendPush(Notification notification, InAppRequest req) {
 
-    private void handleDirect(Notification notification, CreateNotificationRequest req) {
+        if (CollectionUtils.isEmpty(req.userIds())) {
+            return;
+        }
+
+        String title = notification.getContents().stream()
+                .findFirst()
+                .map(Content::getTitle)
+                .orElse("Notification");
+
+        String body = notification.getContents().stream()
+                .findFirst()
+                .map(Content::getBody)
+                .orElse("");
+
+        req.userIds().forEach(userId -> {
+            // bu yerda Firebase / Kafka bo‘ladi
+            System.out.println("Push → user: " + userId);
+            System.out.println("Title: " + title);
+            System.out.println("Body: " + body);
+        });
+    }
+
+
+    private void handleDirect(Notification notification, InAppRequest req) {
         Instant now = Instant.now();
 
         List<ClientNotification> notifications =
