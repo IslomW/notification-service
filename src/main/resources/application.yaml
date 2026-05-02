@@ -5,17 +5,26 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: admin
-    password: admin
+    username: asqarov
+    password: asqarov
     url: jdbc:postgresql://localhost:5432/notification
 
   jpa:
     show-sql: true
     properties:
       hibernate:
+        default_schema: public
         hbm2ddl:
           auto: update
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: asqarovdanater@gmail.com
+    password: kpdz vbti hkyc iawb
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
 
 
   kafka:
@@ -26,6 +35,10 @@ spring:
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.value.default.type: org.sharom.notificationservice.dto.event.UserRegisteredEvent
 
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer

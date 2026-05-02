@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class PushEventConsumer {
 
-    private final FirebaseMessaging firebaseMessaging;
+//    private final FirebaseMessaging firebaseMessaging;
     private final DeviceTokenRepository deviceTokenRepository;
     private final ClientNotificationRepository clientNotificationRepository;
     private final PushEventProducer producer;
@@ -64,24 +64,31 @@ public class PushEventConsumer {
     }
 
 
-    private void sendBatch(List<String> tokens, NotificationDTO content) throws FirebaseMessagingException {
+//    private void sendBatch(List<String> tokens, NotificationDTO content) throws FirebaseMessagingException {
+//
+//        MulticastMessage message = MulticastMessage.builder()
+//                .addAllTokens(tokens)
+//                .setNotification(
+//                        com.google.firebase.messaging.Notification.builder()
+//                                .setTitle(content.title())
+//                                .setBody(content.body())
+//                                .build()
+//                )
+//                .build();
+//
+//        // try catch
+//        BatchResponse response = firebaseMessaging.sendMulticast(message);
+//
+//        handleResponse(response, tokens);
+//    }
 
-        MulticastMessage message = MulticastMessage.builder()
-                .addAllTokens(tokens)
-                .setNotification(
-                        com.google.firebase.messaging.Notification.builder()
-                                .setTitle(content.title())
-                                .setBody(content.body())
-                                .build()
-                )
-                .build();
+    private void sendBatch(List<String> tokens, NotificationDTO content) {
 
-        // try catch
-        BatchResponse response = firebaseMessaging.sendMulticast(message);
-
-        handleResponse(response, tokens);
+        log.info("Mock PUSH:");
+        log.info("Tokens: {}", tokens);
+        log.info("Title: {}", content.title());
+        log.info("Body: {}", content.body());
     }
-
 
     private void handleResponse(BatchResponse response, List<String> tokens) {
 
